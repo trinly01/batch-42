@@ -13,11 +13,11 @@
         <button>x</button>
       </li>
     </ul>
-    {{ data.todos.filter(t => !t.isDone).length }} items left
+    {{ itemsLeft }} items left
   </div>
 </template>
 <script setup>
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 
 const data = reactive({
   task: '',
@@ -29,6 +29,14 @@ const data = reactive({
     }
   ]
 })
+
+const itemsLeft = computed(() => data.todos.filter(t => !t.isDone).length)
+
+// const itemsLeft2 = () => {
+//   console.log('itemsLeft222222')
+//   return data.todos.filter(t => !t.isDone).length
+// }
+// const now = () => new Date()
 
 function changeIsDone (t) {
   console.log('asdasd')
