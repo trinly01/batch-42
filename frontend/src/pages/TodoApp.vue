@@ -10,7 +10,7 @@
 
       <q-btn flat round dense icon="whatshot" />
     </q-toolbar>
-    <cj-steven v-model="data.food" :name="data.name" gender="male" :age="data.age" @ageAdded="ageData => data.age = ageData + 1" />
+    <pie-chart :donut="true" :data="[['active', numbers.active], ['completed', numbers.completed]]"></pie-chart>
     <div class="q-pa-md q-gutter-sm">
       <div class="md-row">
         <q-input class="col" v-model="data.task" label="todo" value="" placeholder="what needs to be done" @keyup.enter="addTask" />
@@ -60,6 +60,7 @@
       {{ itemsLeft }} items left
     </div>
     </div>
+    <cj-steven v-model="data.food" :name="data.name" gender="male" :age="data.age" @ageAdded="ageData => data.age = ageData + 1" />
   </div>
 </template>
 <script setup>
@@ -87,7 +88,7 @@ const itemsLeft = computed(() => data.todos.filter(t => !t.isDone).length)
 const filterByStatus = computed(() => {
   switch (data.tab) {
     case 'completed':
-      return data.todos.filter(t => t.isDone && t.month === 'april')
+      return data.todos.filter(t => t.isDone)
     case 'active':
       return data.todos.filter(t => !t.isDone)
     default:
