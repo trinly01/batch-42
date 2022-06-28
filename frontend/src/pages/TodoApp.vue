@@ -6,7 +6,7 @@
         <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
       </q-avatar>
 
-      <q-toolbar-title>Seek TodoApp</q-toolbar-title>
+      <q-toolbar-title>Seek TodoApp {{ data.tab }}</q-toolbar-title>
 
       <q-btn flat round dense icon="whatshot" />
     </q-toolbar>
@@ -15,8 +15,25 @@
         <q-input class="col" v-model="data.task" label="todo" value="" placeholder="what needs to be done" @keyup.enter="addTask" />
         <q-btn label="add" />
       </div>
+      <div class="row">
+        <q-tabs
+          v-model="data.tab"
+          class="text-teal col"
+        >
+          <q-tab name="all" icon="mail" label="All" >
+            <q-badge v-if="numbers.all" color="grey" floating>{{ numbers.all }}</q-badge>
+          </q-tab>
+          <q-tab name="active" icon="alarm" label="Active" >
+            <q-badge v-if="numbers.active" color="red" floating>{{ numbers.active }}</q-badge>
+          </q-tab>
+          <q-tab name="completed" icon="movie" label="Completed" >
+            <q-badge v-if="numbers.completed" color="green" floating>{{ numbers.completed }}</q-badge>
+          </q-tab>
+        </q-tabs>
+        <q-btn @click="clearCompleted">Clear completed</q-btn>
+      </div>
       <q-list bordered separator>
-        <q-item clickable v-ripple v-for="(t, i) in data.todos" :key="t.id">
+        <q-item clickable v-ripple v-for="(t, i) in filterByStatus" :key="t.id">
           <q-item-section avatar>
             <q-checkbox v-model="t.isDone" />
           </q-item-section>
@@ -48,6 +65,7 @@
 import { reactive, computed } from 'vue'
 
 const data = reactive({
+  tab: 'all',
   editing: -1,
   task: '',
   todos: [
@@ -60,6 +78,29 @@ const data = reactive({
 })
 
 const itemsLeft = computed(() => data.todos.filter(t => !t.isDone).length)
+
+const filterByStatus = computed(() => {
+  switch (data.tab) {
+    case 'completed':
+      return data.todos.filter(t => t.isDone && t.month === 'april')
+    case 'active':
+      return data.todos.filter(t => !t.isDone)
+    default:
+      return data.todos
+  }
+})
+
+const numbers = computed(() => {
+  const active = data.todos.filter(t => !t.isDone).length
+  const allTodos = data.todos.length
+  const completed = allTodos - active
+
+  return { active, all: allTodos, completed }
+})
+
+function clearCompleted () {
+  data.todos = data.todos.filter(t => !t.isDone)
+}
 
 // const itemsLeft2 = () => {
 //   console.log('itemsLeft222222')
