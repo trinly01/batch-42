@@ -6,10 +6,11 @@
         <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
       </q-avatar>
 
-      <q-toolbar-title>Seek TodoApp {{ data.tab }}</q-toolbar-title>
+      <q-toolbar-title>Seek TodoApp {{ data.age }}</q-toolbar-title>
 
       <q-btn flat round dense icon="whatshot" />
     </q-toolbar>
+    <cj-steven v-model="data.food" :name="data.name" gender="male" :age="data.age" @ageAdded="ageData => data.age = ageData + 1" />
     <div class="q-pa-md q-gutter-sm">
       <div class="md-row">
         <q-input class="col" v-model="data.task" label="todo" value="" placeholder="what needs to be done" @keyup.enter="addTask" />
@@ -63,9 +64,13 @@
 </template>
 <script setup>
 import { reactive, computed } from 'vue'
+import cjSteven from 'components/cjSteven.vue'
 
 const data = reactive({
+  age: 21,
+  name: 'Steven',
   tab: 'all',
+  food: ['tenola'],
   editing: -1,
   task: '',
   todos: [
