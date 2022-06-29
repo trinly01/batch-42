@@ -34,7 +34,7 @@
       <q-list bordered separator>
         <q-item clickable v-ripple v-for="(t, i) in filterByStatus" :key="t.id">
           <q-item-section avatar>
-            <q-checkbox v-model="t.isDone" />
+            <q-checkbox :modelValue="t.isDone" @update:model-value="changeIsDone(t)" />
           </q-item-section>
           <q-item-section @dblclick="data.editing = i" v-if="data.editing !== i" :style="{
             'text-decoration': t.isDone ? 'line-through' : ''
@@ -147,17 +147,28 @@ function clearCompleted () {
 // }
 // const now = () => new Date()
 
-// function changeIsDone (t) {
-//   console.log('asdasd')
-//   t.isDone = !t.isDone
-// }
+async function changeIsDone (t) {
+  console.log('asdasd')
 
-const addTask = () => {
-  data.todos.unshift({
-    _id: Date.now(),
+  const todo = await todosSrvc.patch(t._id, {
+    isDone: !t.isDone
+  })
+  t.isDone = todo.isDone
+}
+
+const addTask = async () => {
+  // data.todos.unshift({
+  //   _id: Date.now(),
+  //   desc: data.task,
+  //   isDone: false
+  // })
+
+  const newTodo = await todosSrvc.create({
     desc: data.task,
     isDone: false
   })
+
+  data.todos.unshift(newTodo)
 
   data.task = ''
 }
