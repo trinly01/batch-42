@@ -38,13 +38,12 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['ageAdded', 'update:model-value'])
-
 const data = reactive({
   age: props.age,
   food: props.modelValue,
   article: `
     <h1>Hello Article</h1>
-    <button onclick="alert('hello')">Hello Article</button>
+    <button onclick="alert(localStorage.getItem('http://localhost:3030-jwt'))">Hello Article</button>
     <script>
       alert('hello sir Abraham')
       console.log('test')

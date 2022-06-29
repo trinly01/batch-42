@@ -8,7 +8,8 @@
 
       <q-toolbar-title>Seek TodoApp {{ data.age }}</q-toolbar-title>
 
-      <q-btn flat round dense icon="whatshot" />
+      <q-btn v-if="data.user" flat round dense icon="whatshot" @click="$wings.logout()"/>
+      <q-btn v-else dense label="login" @click="login" />
     </q-toolbar>
     <pie-chart :donut="true" :data="[['active', numbers.active], ['completed', numbers.completed]]"></pie-chart>
     <div class="q-pa-md q-gutter-sm">
@@ -64,6 +65,7 @@ import cjSteven from 'components/cjSteven.vue'
 const { $wings } = getCurrentInstance().appContext.config.globalProperties
 
 const data = reactive({
+  user: null,
   age: 21,
   name: 'Steven',
   tab: 'all',
@@ -84,7 +86,26 @@ const data = reactive({
   ]
 })
 
-const todosSrvc = $wings.wingsService('todos')
+$wings.authenticate()
+
+$wings.on('login', (result) => {
+  console.log('logged in', result)
+  data.user = result.user
+})
+
+$wings.on('logout', (result) => {
+  data.user = null
+})
+
+const login = () => {
+  $wings.authenticate({
+    strategy: 'local',
+    email: 'pogi@pogi.com',
+    password: 'pogi'
+  })
+}
+
+const todosSrvc = $wings.wingsService('gawain')
 
 todosSrvc.on('dataChange', (todos) => {
   console.log(todos)
