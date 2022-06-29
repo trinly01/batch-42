@@ -58,8 +58,10 @@
   </div>
 </template>
 <script setup>
-import { reactive, computed } from 'vue'
+import { reactive, computed, getCurrentInstance } from 'vue'
 import cjSteven from 'components/cjSteven.vue'
+
+const { $wings } = getCurrentInstance().appContext.config.globalProperties
 
 const data = reactive({
   age: 21,
@@ -81,6 +83,14 @@ const data = reactive({
     }
   ]
 })
+
+const todosSrvc = $wings.wingsService('todos')
+
+todosSrvc.on('dataChange', (todos) => {
+  console.log(todos)
+  data.todos = todos
+})
+todosSrvc.init()
 
 function printTodos () {
   console.log('original', data.todos)
