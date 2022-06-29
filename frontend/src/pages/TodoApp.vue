@@ -88,7 +88,7 @@ const todosSrvc = $wings.wingsService('todos')
 
 todosSrvc.on('dataChange', (todos) => {
   console.log(todos)
-  data.todos = todos
+  data.todos = [...todos]
 })
 todosSrvc.init()
 
@@ -150,10 +150,10 @@ function clearCompleted () {
 async function changeIsDone (t) {
   console.log('asdasd')
 
-  const todo = await todosSrvc.patch(t._id, {
+  await todosSrvc.patch(t._id, {
     isDone: !t.isDone
   })
-  t.isDone = todo.isDone
+  // t.isDone = todo.isDone
 }
 
 const addTask = async () => {
@@ -163,12 +163,12 @@ const addTask = async () => {
   //   isDone: false
   // })
 
-  const newTodo = await todosSrvc.create({
+  await todosSrvc.create({
     desc: data.task,
     isDone: false
   })
 
-  data.todos.unshift(newTodo)
+  // data.todos.unshift(newTodo)
 
   data.task = ''
 }
