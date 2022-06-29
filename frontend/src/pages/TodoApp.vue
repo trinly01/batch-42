@@ -91,10 +91,13 @@ $wings.authenticate()
 $wings.on('login', (result) => {
   console.log('logged in', result)
   data.user = result.user
+  todosSrvc.reset()
+  todosSrvc.init()
 })
 
 $wings.on('logout', (result) => {
   data.user = null
+  data.todos = []
 })
 
 const login = () => {
